@@ -29,6 +29,7 @@ public class InventoryDAOTest {
   private InventoryDAO inventoryDAO;
   private static final String NAME = "Amber";
   private static final String PRODUCT_TYPE = "hops";
+  private static final String ID = "id";
 
   @Before
   public void setup() {
@@ -51,5 +52,36 @@ public class InventoryDAOTest {
     this.mongoTemplate.save(inventory);
     List<Inventory> actualInventory = this.inventoryDAO.findAll();
     Assert.assertFalse(actualInventory.isEmpty());
+  }
+
+  // check if object is saved
+  @Test
+  public void createTest1() {
+    Inventory inventory = new Inventory();
+    inventory.setName(NAME);
+    inventory.setProductType(PRODUCT_TYPE);
+    Inventory save = this.inventoryDAO.create(inventory);
+    List<Inventory> actualInventory = this.inventoryDAO.findAll();
+    Assert.assertTrue(actualInventory.contains(save));
+  }
+
+  // check if object does not exist
+  @Test (expected = IllegalArgumentException.class)
+  public void createTest2() {
+    Inventory inventory = null;
+    Inventory save = this.inventoryDAO.create(inventory);
+  }
+
+
+  @Test
+  public void createTest3() {
+    Inventory inventory1 = new Inventory();
+    inventory1.setName(NAME);
+    inventory1.setProductType(PRODUCT_TYPE);
+    inventory1.setId(ID);
+
+    Inventory save = this.inventoryDAO.create(inventory1);
+
+    Assert.assertNotSame(ID, inventory1.getId());
   }
 }

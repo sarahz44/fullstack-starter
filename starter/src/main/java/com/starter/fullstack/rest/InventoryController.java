@@ -37,5 +37,6 @@ public class InventoryController {
   public Inventory createInventory(@Valid @RequestBody Inventory inventory) {
     return this.inventoryDAO.create(inventory);
   }
+
 }
 

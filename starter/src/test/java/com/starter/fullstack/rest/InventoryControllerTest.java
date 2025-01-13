@@ -14,6 +14,9 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+
+import javax.annotation.Resource;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -21,6 +24,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
 public class InventoryControllerTest {
+
+  private static final String PRODUCT = "PRODUCT2";
+  private static final String NAME = "John";
 
   @Autowired
   private MockMvc mockMvc;
@@ -48,8 +54,6 @@ public class InventoryControllerTest {
   }
 
 
-
-
   /**
    * Test create endpoint.
    * @throws Throwable see MockMvc
@@ -57,8 +61,8 @@ public class InventoryControllerTest {
   @Test
   public void create() throws Throwable {
     this.inventory = new Inventory();
-    this.inventory.setProductType("OTHER PRODUCT");
-    this.inventory.setName("A TEST");
+    this.inventory.setProductType(PRODUCT);
+    this.inventory.setName(NAME);
 
     this.mockMvc.perform(post("/inventory")
         .accept(MediaType.APPLICATION_JSON)

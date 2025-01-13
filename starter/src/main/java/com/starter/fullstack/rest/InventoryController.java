@@ -34,7 +34,7 @@ public class InventoryController {
     return this.inventoryDAO.findAll();
   }
 
-  @PostMapping("/inventory")
+  @PostMapping
   public Inventory createInventory(@Valid @RequestBody Inventory inventory) {
     return this.inventoryDAO.create(inventory); }
 

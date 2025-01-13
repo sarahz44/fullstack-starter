@@ -54,7 +54,7 @@ public class InventoryDAOTest {
     Assert.assertFalse(actualInventory.isEmpty());
   }
 
-  // check if object is saved
+  // checks if object is saved
   @Test
   public void createTest1() {
     Inventory inventory = new Inventory();
@@ -65,14 +65,14 @@ public class InventoryDAOTest {
     Assert.assertTrue(actualInventory.contains(save));
   }
 
-  // check if object does not exist
+  // checks create method when object does not exist
   @Test (expected = IllegalArgumentException.class)
   public void createTest2() {
     Inventory inventory = null;
     Inventory save = this.inventoryDAO.create(inventory);
   }
 
-
+  // checks if inventory gets a new ID when calling create method
   @Test
   public void createTest3() {
     Inventory inventory1 = new Inventory();
@@ -82,6 +82,6 @@ public class InventoryDAOTest {
 
     Inventory save = this.inventoryDAO.create(inventory1);
 
-    Assert.assertNotSame(ID, inventory1.getId());
+    Assert.assertNotEquals(ID, save.getId());
   }
 }

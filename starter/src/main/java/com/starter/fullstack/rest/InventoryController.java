@@ -6,7 +6,6 @@ import java.util.List;
 import javax.validation.Valid;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.PostMapping;
 
 /**
  * Inventory Controller.
@@ -36,7 +35,7 @@ public class InventoryController {
 
   @PostMapping
   public Inventory createInventory(@Valid @RequestBody Inventory inventory) {
-    return this.inventoryDAO.create(inventory); }
-
+    return this.inventoryDAO.create(inventory);
+  }
 }
 

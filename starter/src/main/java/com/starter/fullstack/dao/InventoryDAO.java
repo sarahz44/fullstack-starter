@@ -83,7 +83,13 @@ public class InventoryDAO {
    * @return Deleted Inventory.
    */
   public Optional<Inventory> delete(String id) {
-    // TODO
+     // TODO
+     //      Assert.hasLength(id, "ID must not be empty and not be null");
+     //      Query query = new Query();
+     //      query.addCriteria(Criteria.where("id").is(id));
+     //      Inventory inventory = mongoTemplate.findAndRemove(query, Inventory.class);
+     //      return inventory;
+
     return Optional.empty();
   }
 }

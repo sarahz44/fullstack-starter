@@ -30,6 +30,8 @@ public class InventoryDAOTest {
   private static final String NAME = "Amber";
   private static final String PRODUCT_TYPE = "hops";
   private static final String ID = "id";
+  private static final String NAME2 = "Tom";
+  private static final String PRODUCT_TYPE2 = "toast";
 
   @Before
   public void setup() {
@@ -84,4 +86,20 @@ public class InventoryDAOTest {
 
     Assert.assertNotEquals(ID, save.getId());
   }
+
+//  @Test
+//  public void deleteTest1() {
+//    Inventory inventory = new Inventory();
+//    inventory.setName(NAME);
+//    inventory.setProductType(PRODUCT_TYPE);
+//
+//    Inventory save1 = this.inventoryDAO.create(inventory);
+//    Assert.assertEquals(1,this.inventoryDAO.findAll().size());
+//
+//    Inventory remove = this.inventoryDAO.remove(save);
+//    Assert.assertEquals(0, this.inventoryDAO.findAll().size());
+//  }
+
+
+
 }

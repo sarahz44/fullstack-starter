@@ -32,6 +32,8 @@ public class InventoryDAOTest {
   private static final String ID = "id";
   private static final String NAME2 = "Tom";
   private static final String PRODUCT_TYPE2 = "toast";
+  private static final String NAME3 = "Ren";
+  private static final String PRODUCT_TYPE3 = "kite";
 
   @Before
   public void setup() {
@@ -87,19 +89,127 @@ public class InventoryDAOTest {
     Assert.assertNotEquals(ID, save.getId());
   }
 
-//  @Test
-//  public void deleteTest1() {
-//    Inventory inventory = new Inventory();
-//    inventory.setName(NAME);
-//    inventory.setProductType(PRODUCT_TYPE);
-//
-//    Inventory save1 = this.inventoryDAO.create(inventory);
-//    Assert.assertEquals(1,this.inventoryDAO.findAll().size());
-//
-//    Inventory remove = this.inventoryDAO.remove(save);
-//    Assert.assertEquals(0, this.inventoryDAO.findAll().size());
-//  }
+  @Test
+  public void deleteTest1() {
+    Inventory inventory2 = new Inventory();
+    inventory2.setName(NAME2);
+    inventory2.setProductType(PRODUCT_TYPE2);
 
+    Inventory save2 = this.inventoryDAO.create(inventory2);
+    Assert.assertTrue(this.inventoryDAO.findAll().contains(save2));
 
+    Inventory remove = this.inventoryDAO.delete(save2.getId());
+    Assert.assertFalse(this.inventoryDAO.findAll().contains(remove));
+  }
 
+  // checks when string id is null
+  @Test
+  public void deleteTest2() {
+    try {
+      this.inventoryDAO.delete(null);
+    } catch (IllegalArgumentException e) {
+      System.out.println(e.getMessage());
+    }
+  }
+
+  // checks when string id is empty
+  @Test
+  public void deleteTest3() {
+    try {
+      this.inventoryDAO.delete("");
+    } catch (IllegalArgumentException e) {
+      System.out.println(e.getMessage());
+    }
+  }
+
+  // checks if method retrieves the right inventory by comparing id's
+  @Test
+  public void retrieveTest1() {
+    Inventory inventory1 = new Inventory();
+    inventory1.setName(NAME2);
+    inventory1.setProductType(PRODUCT_TYPE2);
+    Inventory saved1 = this.inventoryDAO.create(inventory1);
+
+    Inventory inventory2 = new Inventory();
+    inventory2.setName(NAME3);
+    inventory2.setProductType(PRODUCT_TYPE3);
+    this.inventoryDAO.create(inventory2);
+
+    Inventory retrieved = this.inventoryDAO.retrieve(saved1.getId());
+    Assert.assertEquals(retrieved.getId(), saved1.getId());
+  }
+
+  // checks when string id is empty
+  @Test
+  public void retrieveTest2() {
+    try {
+      this.inventoryDAO.retrieve("");
+    } catch (IllegalArgumentException e) {
+      System.out.println(e.getMessage());
+    }
+  }
+
+  // checks when string id is null
+  @Test
+  public void retrieveTest3() {
+    try {
+      this.inventoryDAO.retrieve(null);
+    } catch (IllegalArgumentException e) {
+      System.out.println(e.getMessage());
+    }
+  }
+
+  // checks if method updates old inventory with new one
+  @Test
+  public void updateTest1() {
+    Inventory newInventory = new Inventory();
+
+    newInventory.setName(NAME2);
+    newInventory.setProductType(PRODUCT_TYPE2);
+    newInventory = this.inventoryDAO.create(newInventory);
+    newInventory.setName("FOOD");
+    Inventory updatedInventory = this.inventoryDAO.update(newInventory.getId(), newInventory);
+    Assert.assertEquals(updatedInventory.getName(), newInventory.getName());
+  }
+
+  // checks when string id is null
+  @Test
+  public void updateTest2() {
+    try {
+      Inventory inventory = new Inventory();
+      inventory.setName(NAME2);
+      inventory.setProductType(PRODUCT_TYPE2);
+      this.inventoryDAO.update(null, inventory);
+    } catch (IllegalArgumentException e) {
+      System.out.println(e.getMessage());
+    }
+  }
+
+  // checks when string is empty
+  @Test
+  public void updateTest3() {
+    try {
+      Inventory inventory = new Inventory();
+      inventory.setName(NAME2);
+      inventory.setProductType(PRODUCT_TYPE2);
+
+      this.inventoryDAO.update("", inventory);
+    } catch (IllegalArgumentException e) {
+      System.out.println(e.getMessage());
+    }
+  }
+
+  // checks when inventory is null
+  @Test
+  public void updateTest4() {
+    try {
+      Inventory inventory = new Inventory();
+      inventory.setName(NAME2);
+      inventory.setProductType(PRODUCT_TYPE2);
+      this.inventoryDAO.create(inventory);
+      this.inventoryDAO.update(inventory.getId(), null);
+    } catch (IllegalArgumentException e) {
+      System.out.println(e.getMessage());
+    }
+  }
 }

@@ -2,12 +2,13 @@ package com.starter.fullstack.dao;
 
 import com.starter.fullstack.api.Inventory;
 import java.util.List;
-import java.util.Optional;
 import javax.annotation.PostConstruct;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.index.IndexOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.util.Assert;
 
 /**
@@ -61,9 +62,10 @@ public class InventoryDAO {
    * @param id Inventory id to Retrieve.
    * @return Found Inventory.
    */
-  public Optional<Inventory> retrieve(String id) {
+  public Inventory retrieve(String id) {
     // TODO
-    return Optional.empty();
+    Assert.hasLength(id, "ID must not be empty and not be null");
+    return this.mongoTemplate.findById(id, Inventory.class);
   }
 
   /**
@@ -72,9 +74,15 @@ public class InventoryDAO {
    * @param inventory Inventory to Update.
    * @return Updated Inventory.
    */
-  public Optional<Inventory> update(String id, Inventory inventory) {
-    // TODO
-    return Optional.empty();
+
+  public Inventory update(String id, Inventory inventory) {
+    Assert.hasLength(id, "ID must not be empty and not be null");
+    Assert.notNull(inventory, "Inventory must not be null");
+    Inventory save = retrieve(id);
+    // checks to see if object exists to be able to update
+    Assert.notNull(save, "Inventory must not be null");
+    // updates the old inventory with the new one
+    return this.mongoTemplate.save(inventory);
   }
 
   /**
@@ -82,14 +90,11 @@ public class InventoryDAO {
    * @param id Id of Inventory.
    * @return Deleted Inventory.
    */
-  public Optional<Inventory> delete(String id) {
+  public Inventory delete(String id) {
      // TODO
-     //      Assert.hasLength(id, "ID must not be empty and not be null");
-     //      Query query = new Query();
-     //      query.addCriteria(Criteria.where("id").is(id));
-     //      Inventory inventory = mongoTemplate.findAndRemove(query, Inventory.class);
-     //      return inventory;
-
-    return Optional.empty();
+    Assert.hasLength(id, "ID must not be empty and not be null");
+    Query query = new Query();
+    query.addCriteria(Criteria.where("id").is(id));
+    return mongoTemplate.findAndRemove(query, Inventory.class);
   }
 }

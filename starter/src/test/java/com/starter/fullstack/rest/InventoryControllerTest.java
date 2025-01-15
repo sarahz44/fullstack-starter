@@ -102,11 +102,11 @@ public class InventoryControllerTest {
     Inventory saved = this.mongoTemplate.save(inventory2);
 
     this.mockMvc.perform(get("/inventory/retrieve")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(saved.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().json(this.objectMapper.writeValueAsString(saved)));
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(saved.getId()))
+        .andExpect(status().isOk())
+        .andExpect(content().json(this.objectMapper.writeValueAsString(saved)));
   }
 
   @Test
@@ -119,10 +119,18 @@ public class InventoryControllerTest {
     inventory1.setName(NEWNAME);
 
     this.mockMvc.perform(put("/inventory")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(this.objectMapper.writeValueAsString(saved)))
-            .andExpect(status().isOk());
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(this.objectMapper.writeValueAsString(saved)))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  public void findAllInventory() throws Throwable {
+
+    this.mockMvc.perform(get("/inventory")
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk());
   }
 
 }

@@ -14,7 +14,11 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -24,6 +28,9 @@ public class InventoryControllerTest {
 
   private static final String PRODUCT = "PRODUCT2";
   private static final String NAME = "John";
+  private static final String PRODUCT2 = "TOAST";
+  private static final String NAME2 = "Mark";
+  private static final String NEWNAME = "NEWNAME";
 
   @Autowired
   private MockMvc mockMvc;
@@ -67,6 +74,55 @@ public class InventoryControllerTest {
         .content(this.objectMapper.writeValueAsString(this.inventory)))
         .andExpect(status().isOk());
     Assert.assertEquals(2, this.mongoTemplate.findAll(Inventory.class).size());
+  }
+
+  @Test
+  public void deleteInventory() throws Throwable {
+    Inventory inventory2 = new Inventory();
+    inventory2.setProductType(PRODUCT2);
+    inventory2.setName(NAME2);
+    Inventory saved = this.mongoTemplate.save(inventory2);
+
+    Assert.assertEquals(2, this.mongoTemplate.findAll(Inventory.class).size());
+
+    this.mockMvc.perform(delete("/inventory")
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(saved.getId()))
+        .andExpect(status().isOk());
+
+    Assert.assertFalse(this.mongoTemplate.findAll(Inventory.class).contains(saved));
+  }
+
+  @Test
+  public void retrieveInventory() throws Throwable {
+    Inventory inventory2 = new Inventory();
+    inventory2.setProductType(PRODUCT2);
+    inventory2.setName(NAME2);
+    Inventory saved = this.mongoTemplate.save(inventory2);
+
+    this.mockMvc.perform(get("/inventory/retrieve")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(saved.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().json(this.objectMapper.writeValueAsString(saved)));
+  }
+
+  @Test
+  public void updateInventory() throws Throwable {
+    Inventory inventory1 = new Inventory();
+    inventory1.setProductType(PRODUCT2);
+    inventory1.setName(NAME2);
+
+    Inventory saved = this.mongoTemplate.save(inventory1);
+    inventory1.setName(NEWNAME);
+
+    this.mockMvc.perform(put("/inventory")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(this.objectMapper.writeValueAsString(saved)))
+            .andExpect(status().isOk());
   }
 
 }

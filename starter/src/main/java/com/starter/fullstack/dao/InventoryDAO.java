@@ -2,6 +2,7 @@ package com.starter.fullstack.dao;
 
 import com.starter.fullstack.api.Inventory;
 import java.util.List;
+import java.util.Optional;
 import javax.annotation.PostConstruct;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -62,10 +63,12 @@ public class InventoryDAO {
    * @param id Inventory id to Retrieve.
    * @return Found Inventory.
    */
-  public Inventory retrieve(String id) {
+  public Optional<Inventory> retrieve(String id) {
     // TODO
     Assert.hasLength(id, "ID must not be empty and not be null");
-    return this.mongoTemplate.findById(id, Inventory.class);
+    Inventory retrieveIn = this.mongoTemplate.findById(id, Inventory.class);
+    Optional<Inventory> retrieved = Optional.of(retrieveIn);
+    return retrieved;
   }
 
   /**
@@ -75,14 +78,16 @@ public class InventoryDAO {
    * @return Updated Inventory.
    */
 
-  public Inventory update(String id, Inventory inventory) {
+  public Optional<Inventory> update(String id, Inventory inventory) {
     Assert.hasLength(id, "ID must not be empty and not be null");
     Assert.notNull(inventory, "Inventory must not be null");
-    Inventory save = retrieve(id);
+    Optional<Inventory> save = retrieve(id);
     // checks to see if object exists to be able to update
     Assert.notNull(save, "Inventory must not be null");
     // updates the old inventory with the new one
-    return this.mongoTemplate.save(inventory);
+    Inventory saveIn = this.mongoTemplate.save(inventory);
+    Optional<Inventory> savedInventory = Optional.of(saveIn);
+    return savedInventory;
   }
 
   /**
@@ -90,11 +95,13 @@ public class InventoryDAO {
    * @param id Id of Inventory.
    * @return Deleted Inventory.
    */
-  public Inventory delete(String id) {
+  public Optional<Inventory> delete(String id) {
      // TODO
     Assert.hasLength(id, "ID must not be empty and not be null");
     Query query = new Query();
     query.addCriteria(Criteria.where("id").is(id));
-    return mongoTemplate.findAndRemove(query, Inventory.class);
+    Inventory removeIn = (mongoTemplate.findAndRemove(query, Inventory.class));
+    Optional<Inventory> removedInventory = Optional.of(removeIn);
+    return removedInventory;
   }
 }

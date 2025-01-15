@@ -2,6 +2,7 @@ package com.starter.fullstack.dao;
 
 import com.starter.fullstack.api.Inventory;
 import java.util.List;
+import java.util.Optional;
 import javax.annotation.Resource;
 import org.junit.After;
 import org.junit.Assert;
@@ -97,8 +98,8 @@ public class InventoryDAOTest {
 
     Inventory save2 = this.inventoryDAO.create(inventory2);
     Assert.assertTrue(this.inventoryDAO.findAll().contains(save2));
-
-    Inventory remove = this.inventoryDAO.delete(save2.getId());
+    Optional<Inventory> deletedIn = this.inventoryDAO.delete(save2.getId());
+    Inventory remove = deletedIn.get();
     Assert.assertFalse(this.inventoryDAO.findAll().contains(remove));
   }
 
@@ -135,7 +136,9 @@ public class InventoryDAOTest {
     inventory2.setProductType(PRODUCT_TYPE3);
     this.inventoryDAO.create(inventory2);
 
-    Inventory retrieved = this.inventoryDAO.retrieve(saved1.getId());
+    Optional<Inventory> retrieveIn = this.inventoryDAO.retrieve(saved1.getId());
+    Inventory retrieved = retrieveIn.get();
+
     Assert.assertEquals(retrieved.getId(), saved1.getId());
   }
 
@@ -168,8 +171,9 @@ public class InventoryDAOTest {
     newInventory.setProductType(PRODUCT_TYPE2);
     newInventory = this.inventoryDAO.create(newInventory);
     newInventory.setName("FOOD");
-    Inventory updatedInventory = this.inventoryDAO.update(newInventory.getId(), newInventory);
-    Assert.assertEquals(updatedInventory.getName(), newInventory.getName());
+    Optional<Inventory> updatedIn = this.inventoryDAO.update(newInventory.getId(), newInventory);
+    Inventory updated = updatedIn.get();
+    Assert.assertEquals(updated.getName(), newInventory.getName());
   }
 
   // checks when string id is null

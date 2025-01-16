@@ -92,6 +92,7 @@ public class InventoryControllerTest {
         .andExpect(status().isOk());
 
     Assert.assertFalse(this.mongoTemplate.findAll(Inventory.class).contains(saved));
+    Assert.assertEquals(1,this.mongoTemplate.findAll(Inventory.class).size());
   }
 
   @Test
@@ -121,8 +122,9 @@ public class InventoryControllerTest {
     this.mockMvc.perform(put("/inventory")
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
-        .content(this.objectMapper.writeValueAsString(saved)))
+        .content(this.objectMapper.writeValueAsString(inventory1)))
         .andExpect(status().isOk());
+
   }
 
   @Test
@@ -130,7 +132,8 @@ public class InventoryControllerTest {
 
     this.mockMvc.perform(get("/inventory")
         .accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andExpect(content().json("[" + this.objectMapper.writeValueAsString(this.inventory) + "]"));
   }
 
 }

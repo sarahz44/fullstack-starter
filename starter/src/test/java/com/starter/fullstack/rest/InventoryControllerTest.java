@@ -118,12 +118,19 @@ public class InventoryControllerTest {
 
     Inventory saved = this.mongoTemplate.save(inventory1);
     inventory1.setName(NEWNAME);
+    String inventory1ID = saved.getId();
+
 
     this.mockMvc.perform(put("/inventory")
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .content(this.objectMapper.writeValueAsString(inventory1)))
         .andExpect(status().isOk());
+
+    Inventory updated1 = this.mongoTemplate.findById(inventory1.getId(),Inventory.class);
+    Assert.assertEquals(NEWNAME, updated1.getName());
+    Assert.assertEquals(inventory1ID,updated1.getId());
+
 
   }
 

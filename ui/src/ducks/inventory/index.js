@@ -1,6 +1,6 @@
 import axios from 'axios'
+import { openSuccess } from '../alerts'
 import { createAction, handleActions } from 'redux-actions'
-import {openSuccess} from '../ducks/alerts'
 
 const actions = {
   INVENTORY_GET_ALL: 'inventory/get_all',
@@ -16,62 +16,62 @@ export let defaultState = {
   fetched: false,
 }
 
-export const findInventory = createAction(actions.INVENTORY_GET_ALL, () => 
-  (dispatchEvent, getState, config) => axios
-  .get('${config.restAPIUrl}/inventory')
-  .then((suc) =>dispatchEvent(refreshInventorys(suc.data)))
+export const findInventory = createAction(actions.INVENTORY_GET_ALL, () =>
+  (dispatch, getState, config) => axios
+    .get(`${config.restAPIUrl}/inventory`)
+    .then((suc) =>dispatch(refreshInventorys(suc.data)))
 )
 
 export const saveInventory = createAction(actions.INVENTORY_SAVE, (inventory) =>
-  (dispatchEvent, getState, config) => axios
-  .post('${config.restAPIUrl}/inventory', inventory)
-  .then((suc) => {
-    const invs = []
-    getState().inventory.all.forEach(inv => {
-      if (inv.id !== suc.data.id) {
-        invs.push
-      }
+  (dispatch, getState, config) => axios
+    .post(`${config.restAPIUrl}/inventory`, inventory)
+    .then((suc) => {
+      const invs = []
+      getState().inventory.all.forEach(inv => {
+        if (inv.id !== suc.data.id) {
+          invs.push(inv)
+        }
+      })
+      invs.push(suc.data)
+      dispatch(refreshInventorys(invs))
+      dispatch(openSuccess('Success in Saving'))
     })
-    invs.push(suc.data)
-    dispatch(refreshInventorys(invs))
-    dispatch(openSuccess("Success in Saving"))
-  })
 )
 
-export const removeInventory = createAction(actions.INVENTORY_DELETE, (id) => 
+export const removeInventory = createAction(actions.INVENTORY_DELETE, (id) =>
   (dispatch, getState, config) => axios
-  .delete('${config.restAPIUrl}/inventory', {data: id})
-  .then((suc) => {
-    const invs = []
-    getState().inventory.all.forEach(inv => {
-      if (inv.id !== suc.data.id) {
-        invs.push(inv)
-      }
+    .delete(`${config.restAPIUrl}/inventory`, { data: id })
+    .then((suc) => {
+      const invs = []
+      getState().inventory.all.forEach(inv => {
+        if (inv.id !== suc.data.id) {
+          invs.push(inv)
+        }
+      })
+      dispatch(refreshInventorys(invs))
+      dispatch(openSuccess('Success in Removing'))
     })
-    dispatch(refreshInventorys(invs))
-    dispatch(openSuccess("Success in Removing"))
-  })
 )
 
 export const updateInventory = createAction(actions.INVENTORY_UPDATE, (inventory) =>
   (dispatch, getState, config) => axios
-  .put('${config.restAPIUrl}/inventory', inventory)
-  .then((suc) => { 
-    const invs = []
-    getState().inventory.all.forEach(inv => {
-        if(inv.id !== suc.data.id) {
+    .put(`${config.restAPIUrl}/inventory`, inventory)
+    .then((suc) => {
+      const invs = []
+      getState().inventory.all.forEach(inv => {
+        if (inv.id !== suc.data.id) {
           invs.push(inv)
         }
+      })
+      invs.push(suc.data)
+      dispatch(refreshInventorys(invs))
+      dispatch(openSuccess('Success in Updating'))
     })
-    invs.push(suc.data)
-    dispatch(refreshInventorys(invs))
-    dispatch(openSuccess("Success in Updating"))
-  })
-) 
+)
 
 export const refreshInventorys = createAction(actions.INVENTORY_REFRESH, (payload) =>
-(dispatcher, getState, config) =>
-  payload.sort((inventoryA, inventoryB) => inventoryA < inventoryB ? -1 : inventoryA > inventoryB ? 1 : 0)
+  (dispatcher, getState, config) =>
+    payload.sort((inventoryA, inventoryB) => inventoryA < inventoryB ? -1 : inventoryA > inventoryB ? 1 : 0)
 )
 
 export default handleActions({

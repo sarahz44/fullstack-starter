@@ -34,7 +34,7 @@ export const saveInventory = createAction(actions.INVENTORY_SAVE, (inventory) =>
     })
     invs.push(suc.data)
     dispatch(refreshInventorys(invs))
-    dispatch(openSuccess("Success in Dispatching"))
+    dispatch(openSuccess("Success in Saving"))
   })
 )
 
@@ -49,7 +49,7 @@ export const removeInventory = createAction(actions.INVENTORY_DELETE, (id) =>
       }
     })
     dispatch(refreshInventorys(invs))
-    dispatch(openSuccess("Success in Dispatching"))
+    dispatch(openSuccess("Success in Removing"))
   })
 )
 
@@ -65,7 +65,7 @@ export const updateInventory = createAction(actions.INVENTORY_UPDATE, (inventory
     })
     invs.push(suc.data)
     dispatch(refreshInventorys(invs))
-    dispatch(openSuccess("Success in Dispatching"))
+    dispatch(openSuccess("Success in Updating"))
   })
 ) 
 

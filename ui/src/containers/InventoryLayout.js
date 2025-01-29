@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
 const normalizeInventory = (inventory) => inventory.map(inv => ({
   ...inv,
-  unitOfMeasurement: MeasurementUnits[inv.unitOfMeasurement].name,
+  unitOfMeasurement: MeasurementUnits[inv.unitOfMeasurement]?.name,
   bestBeforeDate: moment(inv.bestBeforeDate).format('MM/DD/YYYY')
 }))
 
@@ -39,17 +39,20 @@ const headCells = [
   { id: 'name', align: 'left', disablePadding: true, label: 'Name' },
   { id: 'productType', align: 'right', disablePadding: false, label: 'Product' },
   { id: 'description', align: 'right', disablePadding: false, label: 'Description' },
+  { id: 'averagePrice', align: 'right', disablePadding: false, label: 'Average Price' },
   { id: 'amount', align: 'right', disablePadding: false, label: 'Amount' },
   { id: 'unitOfMeasurement', align: 'right', disablePadding: false, label: 'Unit of Measurement' },
   { id: 'bestBeforeDate', align: 'right', disablePadding: false, label: 'Best Before Date' },
+  { id: 'neverExpires', align: 'right', disablePadding: false, label: 'Never Expires' },
 ]
 
 const InventoryLayout = (props) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const inventory = useSelector(state => state.inventory.all)
+  const prod = useSelector(state => state.products.all)
   const isFetched = useSelector(state => state.inventory.fetched && state.products.fetched)
-  const saveInventory = useCallback(inventory => {dispatch(inventoryDuck.saveInventory(inventory)) }, [dispatch])
+  const saveInventory = useCallback(inventory => { dispatch(inventoryDuck.saveInventory(inventory)) }, [dispatch])
 
   useEffect(() => {
     if (!isFetched) {
@@ -67,6 +70,13 @@ const InventoryLayout = (props) => {
 
   const toggleCreate = () => {
     setCreateInOpen(true)
+  }
+
+  const toggleModals = (resetSelected) => {
+    setCreateInOpen(false)
+    if (resetSelected) {
+      setSelected([])
+    }
   }
 
   const handleRequestSort = (event, property) => {
@@ -128,6 +138,16 @@ const InventoryLayout = (props) => {
               {stableSort(normalizedInventory, getComparator(order, orderBy))
                 .map(inv => {
                   const isItemSelected = isSelected(inv.id)
+                  const newDate = inv.bestBeforeDate
+                  const month = newDate.slice(0,2)
+                  const date = newDate.slice(3,5)
+                  const year = newDate.slice(6,10)
+                  const expires = (boolExpires) => {
+                    if (boolExpires === true){
+                      return '✓'
+                    }
+                  }
+
                   return (
                     <TableRow
                       hover
@@ -144,9 +164,11 @@ const InventoryLayout = (props) => {
                       <TableCell padding='none'>{inv.name}</TableCell>
                       <TableCell align='right'>{inv.productType}</TableCell>
                       <TableCell align='right'>{inv.description}</TableCell>
+                      <TableCell align='right'>{inv.averagePrice}</TableCell>
                       <TableCell align='right'>{inv.amount}</TableCell>
                       <TableCell align='right'>{inv.unitOfMeasurement}</TableCell>
-                      <TableCell align='right'>{inv.bestBeforeDate}</TableCell>
+                      <TableCell align='right'>{month}/{date}/{year}</TableCell>
+                      <TableCell align='right'>{expires(inv.neverExpires)}</TableCell>
                     </TableRow>
                   )
                 })}
@@ -157,8 +179,11 @@ const InventoryLayout = (props) => {
           title='Create'
           formName='inventoryCreate'
           isDialogOpen={isCreateInOpen}
+          handleDialog={toggleModals}
           handleInventory={saveInventory}
-          initialValues={{}}
+          initialValues={{ name: '', productType: '', description: '', averagePrice: 0,
+            amount: 0, bestBeforeDate: new Date().toISOString(), neverExpires: false, }}
+          listProd={prod}
         />
       </Grid>
     </Grid>

@@ -71,7 +71,8 @@ export const updateInventory = createAction(actions.INVENTORY_UPDATE, (inventory
 
 export const refreshInventorys = createAction(actions.INVENTORY_REFRESH, (payload) =>
   (dispatcher, getState, config) =>
-    payload.sort((inventoryA, inventoryB) => inventoryA < inventoryB ? -1 : inventoryA > inventoryB ? 1 : 0)
+    payload.sort((inventoryA, inventoryB) => inventoryA.name.toLowerCase() < inventoryB.name.toLowerCase() ? -1 :
+      inventoryA.name.toLowerCase() > inventoryB.name.toLowerCase() ? 1 : 0)
 )
 
 export default handleActions({

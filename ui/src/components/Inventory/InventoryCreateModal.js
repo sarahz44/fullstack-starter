@@ -1,11 +1,10 @@
 import * as Yup from 'yup'
 import Button from '@material-ui/core/Button'
-import Checkbox from '@material-ui/core/Checkbox'
+import Checkbox from '../Form/Checkbox'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Grid from '@material-ui/core/Grid'
 import { MeasurementUnits } from '../../constants/units'
 import { MenuItem } from '@material-ui/core'
@@ -30,8 +29,6 @@ class InventoryCreateModal extends React.Component {
       productType: Yup.string().required(),
       unitOfMeasurement: Yup.string().required(),
     })
-    const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
-
 
     return (
       <Dialog
@@ -127,6 +124,7 @@ class InventoryCreateModal extends React.Component {
                   </Grid>
                   <Grid item xs ={12}>
                     <Field
+                      custom={{ variant: 'outlined', fullWidth: true, }}
                       name='bestBeforeDate'
                       component={TextField}
                       type='date'
@@ -136,8 +134,7 @@ class InventoryCreateModal extends React.Component {
                     <header>Never Expires:</header>
                     <Field
                       name='neverExpires'
-                      component={TextField}
-                      type='checkbox'
+                      component={Checkbox}
                     />
                   </Grid>
 

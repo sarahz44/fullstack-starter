@@ -9,25 +9,31 @@ import Typography from '@material-ui/core/Typography'
 import { Form, Formik } from 'formik'
 
 class InventoryDeleteModal extends React.Component {
-    render() {
-       const {
-        handleDialog,
-        handleDelete,
-        isDialogOpen,
-        initialValues,
-       } = this.props
-    
+  render() {
+    const {
+      handleDialog,
+      handleDelete,
+      isDialogOpen,
+      initialValues,
+    } = this.props
 
     return (
-        <Dialog
-            open={isDialogOpen}
-            onClose={() => handleDialog(false)}
+      <Dialog
+        open={isDialogOpen}
+        onClose={() => handleDialog(false)}
+      >
+        <Formik
+          initialValues={initialValues}
+          onSubmit={ values => {
+            handleDelete(values)
+            handleDialog(values)
+          }}
         >
 
-            
-        </Dialog>
+        </Formik>
+      </Dialog>
     )
-   }    
+  }
 }
 
 export default InventoryDeleteModal

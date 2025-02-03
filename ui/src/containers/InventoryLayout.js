@@ -3,6 +3,7 @@ import * as productDuck from '../ducks/products'
 import Checkbox from '@material-ui/core/Checkbox'
 import Grid from '@material-ui/core/Grid'
 import InventoryCreateModal from '../components/Inventory/InventoryCreateModal'
+import InventoryDeleteModal from '../components/Inventory/InventoryDeleteModal'
 import { makeStyles } from '@material-ui/core/styles'
 import { MeasurementUnits } from '../constants/units'
 import moment from 'moment'
@@ -53,6 +54,7 @@ const InventoryLayout = (props) => {
   const prod = useSelector(state => state.products.all)
   const isFetched = useSelector(state => state.inventory.fetched && state.products.fetched)
   const saveInventory = useCallback(inventory => { dispatch(inventoryDuck.saveInventory(inventory)) }, [dispatch])
+  const removeInventory = useCallback(id => { dispatch(inventoryDuck.removeInventory(id)) }, [dispatch])
 
   useEffect(() => {
     if (!isFetched) {
@@ -62,6 +64,7 @@ const InventoryLayout = (props) => {
   }, [dispatch, isFetched])
 
   const [isCreateInOpen, setCreateInOpen] = React.useState(false)
+  const [isDeleteInOpen, setDeleteInOpen] = React.useState(false)
 
   const normalizedInventory = normalizeInventory(inventory)
   const [order, setOrder] = React.useState('asc')
@@ -72,8 +75,13 @@ const InventoryLayout = (props) => {
     setCreateInOpen(true)
   }
 
+  const toggleDelete = () => {
+    setDeleteInOpen(true)
+  }
+
   const toggleModals = (resetSelected) => {
     setCreateInOpen(false)
+    setDeleteInOpen(false)
     if (resetSelected) {
       setSelected([])
     }
@@ -121,6 +129,7 @@ const InventoryLayout = (props) => {
           numSelected={selected.length}
           title='Inventory'
           toggleCreate={toggleCreate}
+          toggleDelete={toggleDelete}
         />
         <TableContainer component={Paper}>
           <Table size='small' stickyHeader>
@@ -184,6 +193,12 @@ const InventoryLayout = (props) => {
           initialValues={{ name: '', productType: '', description: '', averagePrice: 0,
             amount: 0, bestBeforeDate: new Date().toISOString(), neverExpires: false, }}
           listProd={prod}
+        />
+        <InventoryDeleteModal
+          isDialogOpen={isDeleteInOpen}
+          handleDelete={removeInventory}
+          handleDialog={toggleModals}
+          initialValues={selected.map(select => select.id)}
         />
       </Grid>
     </Grid>

@@ -25,9 +25,11 @@ class InventoryCreateModal extends React.Component {
     } = this.props
 
     const validationSchema = Yup.object().shape({
-      name: Yup.string().required(),
-      productType: Yup.string().required(),
-      unitOfMeasurement: Yup.string().required(),
+      name: Yup.string().required('Name is required').trim(),
+      productType: Yup.string().required('Product Type is required'),
+      unitOfMeasurement: Yup.string().required('Unit of Measurement is required'),
+      amount: Yup.number().positive('Must be postive #'),
+      averagePrice: Yup.number().positive('Must be postive #'),
     })
 
     return (
@@ -123,6 +125,7 @@ class InventoryCreateModal extends React.Component {
                     </Field>
                   </Grid>
                   <Grid item xs ={12}>
+                    <header>Best Before:</header>
                     <Field
                       custom={{ variant: 'outlined', fullWidth: true, }}
                       name='bestBeforeDate'

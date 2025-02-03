@@ -92,7 +92,7 @@ public class InventoryControllerTest {
         .andExpect(status().isOk());
 
     Assert.assertFalse(this.mongoTemplate.findAll(Inventory.class).contains(saved));
-    Assert.assertEquals(1,this.mongoTemplate.findAll(Inventory.class).size());
+    Assert.assertEquals(1, this.mongoTemplate.findAll(Inventory.class).size());
   }
 
   @Test
@@ -127,9 +127,9 @@ public class InventoryControllerTest {
         .content(this.objectMapper.writeValueAsString(inventory1)))
         .andExpect(status().isOk());
 
-    Inventory updated1 = this.mongoTemplate.findById(inventory1.getId(),Inventory.class);
+    Inventory updated1 = this.mongoTemplate.findById(inventory1.getId(), Inventory.class);
     Assert.assertEquals(NEWNAME, updated1.getName());
-    Assert.assertEquals(inventory1ID,updated1.getId());
+    Assert.assertEquals(inventory1ID, updated1.getId());
 
 
   }

@@ -13,27 +13,58 @@ class InventoryDeleteModal extends React.Component {
     const {
       handleDialog,
       handleDelete,
-      isDialogOpen,
       initialValues,
+      isDialogOpen,
     } = this.props
-
+    // Problem: checked values are not added to selected array
     return (
       <Dialog
         open={isDialogOpen}
         onClose={() => handleDialog(false)}
       >
+        {console.warn(initialValues)}
         <Formik
           initialValues={initialValues}
           onSubmit={ values => {
+            console.warn('THE VALUE' + values)
             handleDelete(values)
             handleDialog(values)
-          }}
-        >
+          }}>
+          { helpers =>
+            <Form
+              autoComplete='off'
+              id={'deleteInventory'}
+            >
+              <DialogTitle id='alert-dialog-title'>
+                Delete Inventory
+              </DialogTitle>
+              <DialogContent>
+                <Grid container>
+                  <Grid xs={12}>
+                    <Typography>
+                       Are you sure you want to delete this inventory
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => { handleDialog(false) }} color='secondary'>No</Button>
+                <Button disableElevation variant='contained' type='submit' form={'deleteInventory'} color='secondary'>
+                  Yes
+                </Button>
+              </DialogActions>
+            </Form>
+          }
 
         </Formik>
       </Dialog>
     )
   }
 }
+
+InventoryDeleteModal.defaultProps = {
+  delete: {}
+}
+
 
 export default InventoryDeleteModal

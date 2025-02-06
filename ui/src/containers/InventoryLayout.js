@@ -54,7 +54,7 @@ const InventoryLayout = (props) => {
   const prod = useSelector(state => state.products.all)
   const isFetched = useSelector(state => state.inventory.fetched && state.products.fetched)
   const saveInventory = useCallback(inventory => { dispatch(inventoryDuck.saveInventory(inventory)) }, [dispatch])
-  const removeInventory = useCallback(id => { dispatch(inventoryDuck.removeInventory(id)) }, [dispatch])
+  const removeInventory = useCallback(ids => { dispatch(inventoryDuck.removeInventory(ids)) }, [dispatch])
 
   useEffect(() => {
     if (!isFetched) {
@@ -104,6 +104,7 @@ const InventoryLayout = (props) => {
 
   const handleClick = (event, id) => {
     const selectedIndex = selected.indexOf(id)
+    console.warn('HELLOOOO' + id)
     let newSelected = []
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, id)
@@ -198,7 +199,7 @@ const InventoryLayout = (props) => {
           isDialogOpen={isDeleteInOpen}
           handleDelete={removeInventory}
           handleDialog={toggleModals}
-          initialValues={selected.map(select => select.id)}
+          initialValues={selected.map(select => select)}
         />
       </Grid>
     </Grid>

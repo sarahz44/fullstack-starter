@@ -28,8 +28,8 @@ class InventoryCreateModal extends React.Component {
       name: Yup.string().required('Name is required').trim(),
       productType: Yup.string().required('Product Type is required'),
       unitOfMeasurement: Yup.string().required('Unit of Measurement is required'),
-      amount: Yup.number().positive('Must be postive #'),
-      averagePrice: Yup.number().positive('Must be postive #'),
+      amount: Yup.number().positive('Must be postive #').min(0),
+      averagePrice: Yup.number().positive('Must be postive #').min(0),
     })
 
     return (

@@ -23,7 +23,7 @@ class InventoryCreateModal extends React.Component {
       initialValues,
       listProd
     } = this.props
-
+    console.warn('DIALOG' + this.props.isDialogOpen)
     const validationSchema = Yup.object().shape({
       name: Yup.string().required('Name is required').trim(),
       productType: Yup.string().required('Product Type is required'),

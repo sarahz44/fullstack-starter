@@ -22,11 +22,9 @@ class InventoryDeleteModal extends React.Component {
         open={isDialogOpen}
         onClose={() => handleDialog(false)}
       >
-        {console.warn(initialValues)}
         <Formik
           initialValues={initialValues}
           onSubmit={ values => {
-            console.warn('THE VALUE' + values)
             handleDelete(values)
             handleDialog(values)
           }}>
@@ -42,7 +40,7 @@ class InventoryDeleteModal extends React.Component {
                 <Grid container>
                   <Grid xs={12}>
                     <Typography>
-                       Are you sure you want to delete this inventory
+                       Are you sure you want to delete this inventory?
                     </Typography>
                   </Grid>
                 </Grid>

@@ -55,6 +55,7 @@ const InventoryLayout = (props) => {
   const isFetched = useSelector(state => state.inventory.fetched && state.products.fetched)
   const saveInventory = useCallback(inventory => { dispatch(inventoryDuck.saveInventory(inventory)) }, [dispatch])
   const removeInventory = useCallback(ids => { dispatch(inventoryDuck.removeInventory(ids)) }, [dispatch])
+  const updateInventory = useCallback(inventory => { dispatch(inventoryDuck.updateInventory(inventory)) }, [dispatch])
 
   useEffect(() => {
     if (!isFetched) {
@@ -65,6 +66,7 @@ const InventoryLayout = (props) => {
 
   const [isCreateInOpen, setCreateInOpen] = React.useState(false)
   const [isDeleteInOpen, setDeleteInOpen] = React.useState(false)
+  const [isEditInOpen, setEditInOpen] = React.useState(false)
 
   const normalizedInventory = normalizeInventory(inventory)
   const [order, setOrder] = React.useState('asc')
@@ -79,9 +81,14 @@ const InventoryLayout = (props) => {
     setDeleteInOpen(true)
   }
 
+  const toggleEdit = () => {
+    setEditInOpen(true)
+  }
+
   const toggleModals = (resetSelected) => {
     setCreateInOpen(false)
     setDeleteInOpen(false)
+    setEditInOpen(false)
     if (resetSelected) {
       setSelected([])
     }
@@ -104,7 +111,6 @@ const InventoryLayout = (props) => {
 
   const handleClick = (event, id) => {
     const selectedIndex = selected.indexOf(id)
-    console.warn('HELLOOOO' + id)
     let newSelected = []
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, id)
@@ -131,6 +137,7 @@ const InventoryLayout = (props) => {
           title='Inventory'
           toggleCreate={toggleCreate}
           toggleDelete={toggleDelete}
+          toggleEdit={toggleEdit}
         />
         <TableContainer component={Paper}>
           <Table size='small' stickyHeader>
@@ -200,6 +207,15 @@ const InventoryLayout = (props) => {
           handleDelete={removeInventory}
           handleDialog={toggleModals}
           initialValues={selected.map(select => select)}
+        />
+
+        <InventoryCreateModal
+          title='Edit'
+          formName='inventoryEdit'
+          isDialogOpen={isEditInOpen}
+          handleInventory={updateInventory}
+          handleDialog={toggleModals}
+          initialValues={selected[0]}
         />
       </Grid>
     </Grid>

@@ -68,6 +68,7 @@ class InventoryCreateModal extends React.Component {
                       component={TextField}
                     />
                   </Grid>
+
                   <Grid item xs ={12} sm={12}>
                     <Field
                       name='productType'

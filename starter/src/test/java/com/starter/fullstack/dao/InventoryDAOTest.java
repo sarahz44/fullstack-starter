@@ -1,6 +1,6 @@
 package com.starter.fullstack.dao;
-
 import com.starter.fullstack.api.Inventory;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.annotation.Resource;
@@ -74,7 +74,7 @@ public class InventoryDAOTest {
   @Test (expected = IllegalArgumentException.class)
   public void createTest2() {
     Inventory inventory = null;
-    Inventory save = this.inventoryDAO.create(inventory);
+    this.inventoryDAO.create(inventory);
   }
 
   // checks if inventory gets a new ID when calling create method
@@ -96,11 +96,27 @@ public class InventoryDAOTest {
     inventory2.setName(NAME2);
     inventory2.setProductType(PRODUCT_TYPE2);
 
+    Inventory inventory3 =  new Inventory();
+    inventory3.setName("Bear");
+    inventory3.setProductType("Chipotle");
+
+
     Inventory save2 = this.inventoryDAO.create(inventory2);
+    Inventory save3 = this.inventoryDAO.create(inventory3);
+
     Assert.assertTrue(this.inventoryDAO.findAll().contains(save2));
-    Optional<Inventory> deletedIn = this.inventoryDAO.delete(save2.getId());
-    Inventory remove = deletedIn.get();
-    Assert.assertFalse(this.inventoryDAO.findAll().contains(remove));
+    Assert.assertTrue(this.inventoryDAO.findAll().contains(save3));
+
+    List<String> ids = new ArrayList<>();
+
+    ids.add(save2.getId());
+
+    List<Optional<Inventory>> deletedIn = this.inventoryDAO.delete(ids);
+    for (Optional<Inventory> x : deletedIn) {
+      Inventory remove =  x.get();
+      Assert.assertFalse(this.inventoryDAO.findAll().contains(remove));
+    }
+    Assert.assertTrue(this.inventoryDAO.findAll().contains(save3));
   }
 
   // checks when string id is null
@@ -108,16 +124,17 @@ public class InventoryDAOTest {
   public void deleteTest2() {
     try {
       this.inventoryDAO.delete(null);
-    } catch (IllegalArgumentException e) {
+    } catch (NullPointerException e) {
       System.out.println(e.getMessage());
     }
   }
 
-  // checks when string id is empty
+  // checks when List id is empty
   @Test
   public void deleteTest3() {
     try {
-      this.inventoryDAO.delete("");
+      List<String> test = new ArrayList<>();
+      this.inventoryDAO.delete(test);
     } catch (IllegalArgumentException e) {
       System.out.println(e.getMessage());
     }

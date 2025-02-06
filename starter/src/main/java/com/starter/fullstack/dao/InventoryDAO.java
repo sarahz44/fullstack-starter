@@ -1,6 +1,6 @@
 package com.starter.fullstack.dao;
-
 import com.starter.fullstack.api.Inventory;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.annotation.PostConstruct;
@@ -22,6 +22,7 @@ public class InventoryDAO {
 
   /**
    * Default Constructor.
+   * 
    * @param mongoTemplate MongoTemplate.
    */
   public InventoryDAO(MongoTemplate mongoTemplate) {
@@ -41,6 +42,7 @@ public class InventoryDAO {
 
   /**
    * Find All Inventory.
+   * 
    * @return List of found Inventory.
    */
   public List<Inventory> findAll() {
@@ -49,6 +51,7 @@ public class InventoryDAO {
 
   /**
    * Save Inventory.
+   * 
    * @param inventory Inventory to Save/Update.
    * @return Created/Updated Inventory.
    */
@@ -60,6 +63,7 @@ public class InventoryDAO {
 
   /**
    * Retrieve Inventory.
+   * 
    * @param id Inventory id to Retrieve.
    * @return Found Inventory.
    */
@@ -73,7 +77,8 @@ public class InventoryDAO {
 
   /**
    * Update Inventory.
-   * @param id Inventory id to Update.
+   * 
+   * @param id        Inventory id to Update.
    * @param inventory Inventory to Update.
    * @return Updated Inventory.
    */
@@ -90,18 +95,17 @@ public class InventoryDAO {
     return savedInventory;
   }
 
-  /**
-   * Delete Inventory By Id.
-   * @param id Id of Inventory.
-   * @return Deleted Inventory.
-   */
-  public Optional<Inventory> delete(String id) {
-     // TODO
-    Assert.hasLength(id, "ID must not be empty and not be null");
-    Query query = new Query();
-    query.addCriteria(Criteria.where("id").is(id));
-    Inventory removeIn = (mongoTemplate.findAndRemove(query, Inventory.class));
-    Optional<Inventory> removedInventory = Optional.of(removeIn);
-    return removedInventory;
+  public List<Optional<Inventory>> delete(List<String> ids) {
+    List<Optional<Inventory>> retList = new ArrayList<>();
+
+    for (String id : ids) {
+      Assert.hasLength(id, "ID must not be empty and not be null");
+      Query query = new Query();
+      query.addCriteria(Criteria.where("id").is(id));
+      Inventory removeIn = (mongoTemplate.findAndRemove(query, Inventory.class));
+      Optional<Inventory> removedInventory = Optional.of(removeIn);
+      retList.add(removedInventory);
+    }
+    return retList;
   }
 }

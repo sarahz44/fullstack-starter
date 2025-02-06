@@ -1,7 +1,8 @@
 package com.starter.fullstack.rest;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.starter.fullstack.api.Inventory;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,7 +15,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -85,10 +85,13 @@ public class InventoryControllerTest {
 
     Assert.assertEquals(2, this.mongoTemplate.findAll(Inventory.class).size());
 
-    this.mockMvc.perform(delete("/inventory")
+    List<String> ids = new ArrayList<>();
+    ids.add(saved.getId());
+
+    this.mockMvc.perform(post("/inventory/deleteInv")
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
-        .content(saved.getId()))
+        .content(this.objectMapper.writeValueAsString(ids)))
         .andExpect(status().isOk());
 
     Assert.assertFalse(this.mongoTemplate.findAll(Inventory.class).contains(saved));

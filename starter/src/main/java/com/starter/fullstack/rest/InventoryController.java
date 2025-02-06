@@ -39,9 +39,10 @@ public class InventoryController {
     return this.inventoryDAO.create(inventory);
   }
 
-  @DeleteMapping
-  public Optional<Inventory> deleteInventory(@Valid @RequestBody String id) {
-    return this.inventoryDAO.delete(id);
+  @PostMapping("/deleteInv")
+  public void deleteInventory(@RequestBody List<String> ids) {
+    Assert.notEmpty(ids, "Inventory Ids were not provided");
+    this.inventoryDAO.delete(ids);
   }
 
   @GetMapping("/retrieve")

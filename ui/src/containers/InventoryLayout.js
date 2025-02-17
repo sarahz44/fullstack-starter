@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 
 const normalizeInventory = (inventory) => inventory.map(inv => ({
   ...inv,
-  unitOfMeasurement: MeasurementUnits[inv.unitOfMeasurement]?.name,
+  unitOfMeasurement: MeasurementUnits[inv.unitOfMeasurement].name,
   bestBeforeDate: moment(inv.bestBeforeDate).format('MM/DD/YYYY')
 }))
 
@@ -57,12 +57,15 @@ const InventoryLayout = (props) => {
   const removeInventory = useCallback(ids => { dispatch(inventoryDuck.removeInventory(ids)) }, [dispatch])
   const updateInventory = useCallback(inventory => { dispatch(inventoryDuck.updateInventory(inventory)) }, [dispatch])
 
+
+
   useEffect(() => {
     if (!isFetched) {
       dispatch(inventoryDuck.findInventory())
       dispatch(productDuck.findProducts())
     }
   }, [dispatch, isFetched])
+
 
   const [isCreateInOpen, setCreateInOpen] = React.useState(false)
   const [isDeleteInOpen, setDeleteInOpen] = React.useState(false)
@@ -72,6 +75,18 @@ const InventoryLayout = (props) => {
   const [order, setOrder] = React.useState('asc')
   const [orderBy, setOrderBy] = React.useState('calories')
   const [selected, setSelected] = React.useState([])
+
+  const selectedName = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.name)
+  const selectedProduct = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.productType)
+  const selectedDescription = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.description)
+  const selectedPrice = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.averagePrice)
+  const selectedAmount = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.amount)
+  const selectedUnit = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.unitOfMeasurement)
+  const selectedDate = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.bestBeforeDate)
+  const selectedExpires = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.neverExpires)
+  const selectedID = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.id)
+  const selectedVer = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.version)
+
 
   const toggleCreate = () => {
     setCreateInOpen(true)
@@ -206,7 +221,7 @@ const InventoryLayout = (props) => {
           isDialogOpen={isDeleteInOpen}
           handleDelete={removeInventory}
           handleDialog={toggleModals}
-          initialValues={selected.map(select => select)}
+          initialValues={selected}
         />
 
         <InventoryCreateModal
@@ -215,7 +230,9 @@ const InventoryLayout = (props) => {
           isDialogOpen={isEditInOpen}
           handleInventory={updateInventory}
           handleDialog={toggleModals}
-          initialValues={selected[0]}
+          initialValues={{version:parseInt(selectedVer) , id:selectedID.toString(), name: selectedName.toString(), productType: selectedProduct.toString(),unitOfMeasurement: selectedUnit.toString(), description: selectedDescription.toString(), averagePrice: parseFloat(selectedPrice),
+            amount: parseInt(selectedAmount), bestBeforeDate: selectedDate, neverExpires: Boolean(selectedExpires), }}
+          listProd={prod}
         />
       </Grid>
     </Grid>

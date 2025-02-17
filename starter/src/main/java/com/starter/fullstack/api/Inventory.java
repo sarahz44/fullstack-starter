@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 
 /**
@@ -13,6 +14,7 @@ import org.springframework.data.annotation.Version;
  */
 @Data
 public class Inventory {
+  @Id
   private String id;
   @Version
   private long version;

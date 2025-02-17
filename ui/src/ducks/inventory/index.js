@@ -8,7 +8,8 @@ const actions = {
   INVENTORY_SAVE: 'inventory/save',
   INVENTORY_DELETE: 'inventory/delete',
   INVENTORY_GET_ALL_PENDING: 'inventory/get_all_PENDING',
-  INVENTORY_UPDATE: 'inventory/update'
+  INVENTORY_UPDATE: 'inventory/update',
+  INVENTORY_RETRIEVE: 'inventory/retrieve',
 }
 
 export let defaultState = {
@@ -20,6 +21,14 @@ export const findInventory = createAction(actions.INVENTORY_GET_ALL, () =>
   (dispatch, getState, config) => axios
     .get(`${config.restAPIUrl}/inventory`)
     .then((suc) =>dispatch(refreshInventorys(suc.data)))
+)
+
+export const retrieveInventory = createAction(actions.INVENTORY_RETRIEVE, (id) =>
+  (dispatch, getState, config) => axios
+    .get(`${config.restAPIUrl}/inventory/retrieve`, id)
+    .then((suc) =>{
+      dispatch(openSuccess('Success in Retrieving'))
+    })
 )
 
 export const saveInventory = createAction(actions.INVENTORY_SAVE, (inventory) =>
@@ -55,7 +64,7 @@ export const removeInventory = createAction(actions.INVENTORY_DELETE, (ids) =>
 
 export const updateInventory = createAction(actions.INVENTORY_UPDATE, (inventory) =>
   (dispatch, getState, config) => axios
-    .put(`${config.restAPIUrl}/inventory`, inventory)
+    .post(`${config.restAPIUrl}/inventory/updateInv`, inventory)
     .then((suc) => {
       const invs = []
       getState().inventory.all.forEach(inv => {

@@ -87,8 +87,6 @@ const InventoryLayout = (props) => {
   const selectedID = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.id)
   const selectedVer = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.version)
 
-  //const ret = retrieveInventory(selected[0])
-  //console.warn('RETRIEVED INVENTORY' + ret)
 
   const toggleCreate = () => {
     setCreateInOpen(true)

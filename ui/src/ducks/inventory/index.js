@@ -25,15 +25,8 @@ export const findInventory = createAction(actions.INVENTORY_GET_ALL, () =>
 
 export const retrieveInventory = createAction(actions.INVENTORY_RETRIEVE, (id) =>
   (dispatch, getState, config) => axios
-    .get(`${config.restAPIUrl}/inventory/retrieve`)
+    .get(`${config.restAPIUrl}/inventory/retrieve`, id)
     .then((suc) =>{
-      const invs = []
-      getState.inventory.all.forEach(inv => {
-        if(inv.id === id){
-          invs.push(inv)
-        }
-      })
-      dispatch(refreshInventorys(invs))
       dispatch(openSuccess('Success in Retrieving'))
     })
 )

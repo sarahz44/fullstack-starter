@@ -50,7 +50,7 @@ public class InventoryController {
     return this.inventoryDAO.retrieve(id);
   }
 
-  @PutMapping
+  @PostMapping("/updateInv")
   public Optional<Inventory> updateInventory(@Valid @RequestBody Inventory inventory) {
     String id = inventory.getId();
     return this.inventoryDAO.update(id, inventory);

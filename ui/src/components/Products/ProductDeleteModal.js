@@ -24,7 +24,6 @@ class ProductDeleteModal extends React.Component {
         <Formik
           initialValues={initialValues}
           onSubmit={values => {
-            console.warn('THE VALUE' + values)
             handleDelete(values)
             handleDialog(true)
           }}>

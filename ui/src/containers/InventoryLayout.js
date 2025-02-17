@@ -76,16 +76,16 @@ const InventoryLayout = (props) => {
   const [orderBy, setOrderBy] = React.useState('calories')
   const [selected, setSelected] = React.useState([])
 
-  const selectedName = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.name)
-  const selectedProduct = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.productType)
-  const selectedDescription = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.description)
-  const selectedPrice = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.averagePrice)
-  const selectedAmount = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.amount)
-  const selectedUnit = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.unitOfMeasurement)
-  const selectedDate = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.bestBeforeDate)
-  const selectedExpires = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.neverExpires)
-  const selectedID = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.id)
-  const selectedVer = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.version)
+  const selectedName = inventory.filter(inv => inv.id === selected[0]).map(theINV => theINV.name)
+  const selectedProduct = inventory.filter(inv => inv.id === selected[0]).map(theINV => theINV.productType)
+  const selectedDescription = inventory.filter(inv => inv.id === selected[0]).map(theINV => theINV.description)
+  const selectedPrice = inventory.filter(inv => inv.id === selected[0]).map(theINV => theINV.averagePrice)
+  const selectedAmount = inventory.filter(inv => inv.id === selected[0]).map(theINV => theINV.amount)
+  const selectedUnit = inventory.filter(inv => inv.id === selected[0]).map(theINV => theINV.unitOfMeasurement)
+  const selectedDate = inventory.filter(inv => inv.id === selected[0]).map(theINV => theINV.bestBeforeDate)
+  const selectedExpires = inventory.filter(inv => inv.id === selected[0]).map(theINV => theINV.neverExpires)
+  const selectedID = inventory.filter(inv => inv.id === selected[0]).map(theINV => theINV.id)
+  const selectedVer = inventory.filter(inv => inv.id === selected[0]).map(theINV => theINV.version)
 
 
   const toggleCreate = () => {
@@ -230,7 +230,7 @@ const InventoryLayout = (props) => {
           isDialogOpen={isEditInOpen}
           handleInventory={updateInventory}
           handleDialog={toggleModals}
-          initialValues={{version:parseInt(selectedVer) , id:selectedID.toString(), name: selectedName.toString(), productType: selectedProduct.toString(),unitOfMeasurement: selectedUnit.toString(), description: selectedDescription.toString(), averagePrice: parseFloat(selectedPrice),
+          initialValues={{ version:parseInt(selectedVer) , id:selectedID.toString(), name: selectedName.toString(), productType: selectedProduct.toString(),unitOfMeasurement: selectedUnit.toString(), description: selectedDescription.toString(), averagePrice: parseFloat(selectedPrice),
             amount: parseInt(selectedAmount), bestBeforeDate: selectedDate, neverExpires: Boolean(selectedExpires), }}
           listProd={prod}
         />

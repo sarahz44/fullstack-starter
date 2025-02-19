@@ -88,6 +88,8 @@ const InventoryLayout = (props) => {
   const selectedVer = inventory.filter(inv => inv.id === selected[0]).map(theINV => theINV.version)
 
 
+
+
   const toggleCreate = () => {
     setCreateInOpen(true)
   }
@@ -174,6 +176,7 @@ const InventoryLayout = (props) => {
                   const month = newDate.slice(0,2)
                   const date = newDate.slice(3,5)
                   const year = newDate.slice(6,10)
+                  console.warn('UPDATED' + inv.neverExpires)
                   const expires = (boolExpires) => {
                     if (boolExpires === true){
                       return '✓'
@@ -214,7 +217,7 @@ const InventoryLayout = (props) => {
           handleDialog={toggleModals}
           handleInventory={saveInventory}
           initialValues={{ name: '', productType: '',unitOfMeasurement: '', description: '', averagePrice: 0,
-            amount: 0, bestBeforeDate: new Date().toISOString(), neverExpires: false, }}
+            amount: 0, bestBeforeDate: new Date().toISOString(), neverExpires: '', }}
           listProd={prod}
         />
         <InventoryDeleteModal
@@ -231,7 +234,7 @@ const InventoryLayout = (props) => {
           handleInventory={updateInventory}
           handleDialog={toggleModals}
           initialValues={{ version:parseInt(selectedVer) , id:selectedID.toString(), name: selectedName.toString(), productType: selectedProduct.toString(),unitOfMeasurement: selectedUnit.toString(), description: selectedDescription.toString(), averagePrice: parseFloat(selectedPrice),
-            amount: parseInt(selectedAmount), bestBeforeDate: selectedDate, neverExpires: Boolean(selectedExpires), }}
+            amount: parseInt(selectedAmount), bestBeforeDate: selectedDate, neverExpires: selectedExpires.toString(), }}
           listProd={prod}
         />
       </Grid>

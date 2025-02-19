@@ -76,16 +76,18 @@ const InventoryLayout = (props) => {
   const [orderBy, setOrderBy] = React.useState('calories')
   const [selected, setSelected] = React.useState([])
 
-  const selectedName = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.name)
-  const selectedProduct = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.productType)
-  const selectedDescription = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.description)
-  const selectedPrice = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.averagePrice)
-  const selectedAmount = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.amount)
-  const selectedUnit = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.unitOfMeasurement)
-  const selectedDate = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.bestBeforeDate)
-  const selectedExpires = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.neverExpires)
-  const selectedID = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.id)
-  const selectedVer = inventory.filter(inv => inv.id == selected[0]).map(theINV => theINV.version)
+  const selectedName = inventory.filter(inv => inv.id === selected[0]).map(theINV => theINV.name)
+  const selectedProduct = inventory.filter(inv => inv.id === selected[0]).map(theINV => theINV.productType)
+  const selectedDescription = inventory.filter(inv => inv.id === selected[0]).map(theINV => theINV.description)
+  const selectedPrice = inventory.filter(inv => inv.id === selected[0]).map(theINV => theINV.averagePrice)
+  const selectedAmount = inventory.filter(inv => inv.id === selected[0]).map(theINV => theINV.amount)
+  const selectedUnit = inventory.filter(inv => inv.id === selected[0]).map(theINV => theINV.unitOfMeasurement)
+  const selectedDate = inventory.filter(inv => inv.id === selected[0]).map(theINV => theINV.bestBeforeDate)
+  const selectedExpires = inventory.filter(inv => inv.id === selected[0]).map(theINV => theINV.neverExpires)
+  const selectedID = inventory.filter(inv => inv.id === selected[0]).map(theINV => theINV.id)
+  const selectedVer = inventory.filter(inv => inv.id === selected[0]).map(theINV => theINV.version)
+
+
 
 
   const toggleCreate = () => {
@@ -174,6 +176,7 @@ const InventoryLayout = (props) => {
                   const month = newDate.slice(0,2)
                   const date = newDate.slice(3,5)
                   const year = newDate.slice(6,10)
+                  console.warn('UPDATED' + inv.neverExpires)
                   const expires = (boolExpires) => {
                     if (boolExpires === true){
                       return '✓'
@@ -214,7 +217,7 @@ const InventoryLayout = (props) => {
           handleDialog={toggleModals}
           handleInventory={saveInventory}
           initialValues={{ name: '', productType: '',unitOfMeasurement: '', description: '', averagePrice: 0,
-            amount: 0, bestBeforeDate: new Date().toISOString(), neverExpires: false, }}
+            amount: 0, bestBeforeDate: new Date().toISOString(), neverExpires: '', }}
           listProd={prod}
         />
         <InventoryDeleteModal
@@ -230,8 +233,8 @@ const InventoryLayout = (props) => {
           isDialogOpen={isEditInOpen}
           handleInventory={updateInventory}
           handleDialog={toggleModals}
-          initialValues={{version:parseInt(selectedVer) , id:selectedID.toString(), name: selectedName.toString(), productType: selectedProduct.toString(),unitOfMeasurement: selectedUnit.toString(), description: selectedDescription.toString(), averagePrice: parseFloat(selectedPrice),
-            amount: parseInt(selectedAmount), bestBeforeDate: selectedDate, neverExpires: Boolean(selectedExpires), }}
+          initialValues={{ version:parseInt(selectedVer) , id:selectedID.toString(), name: selectedName.toString(), productType: selectedProduct.toString(),unitOfMeasurement: selectedUnit.toString(), description: selectedDescription.toString(), averagePrice: parseFloat(selectedPrice),
+            amount: parseInt(selectedAmount), bestBeforeDate: selectedDate, neverExpires: selectedExpires.toString(), }}
           listProd={prod}
         />
       </Grid>

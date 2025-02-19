@@ -43,6 +43,7 @@ class InventoryCreateModal extends React.Component {
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={values => {
+            console.warn('Checkboxxx' + values.neverExpires)
             const temp = values.bestBeforeDate
             const inputDate = new Date(temp)
             const temp2 = inputDate.toISOString()
